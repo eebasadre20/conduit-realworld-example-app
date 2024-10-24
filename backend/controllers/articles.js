@@ -1,6 +1,7 @@
 const {
   AlreadyTakenError,
   FieldRequiredError,
+  ForbiddenError,
   NotFoundError,
   UnauthorizedError,
 } = require("../helper/customErrors");
@@ -10,7 +11,8 @@ const {
   appendTagList,
   slugify,
 } = require("../helper/helpers");
-const { Article, Tag, User } = require("../models/Article");
+const Article = require("../models/Article.js");
+const { Tag, User } = require("./models/Article");
 
 const includeOptions = [
   { model: Tag, as: "tagList", attributes: ["name"] },
@@ -78,7 +80,7 @@ const createArticle = async (req, res, next) => {
     const { title, description, body, tagList } = req.body.article;
     if (!title) throw new FieldRequiredError("A title");
     if (!description) throw new FieldRequiredError("A description");
-    if (!body) throw a FieldRequiredError("An article body");
+    if (!body) throw new FieldRequiredError("An article body");
 
     const slug = slugify(title);
     const slugInDB = await Article.findOne({ where: { slug: slug } });
@@ -183,7 +185,7 @@ const updateArticle = async (req, res, next) => {
     });
     if (!article) throw new NotFoundError("Article");
 
-    if (loggedUser.id !== article.userId) {
+    if (loggedUser.id !== article.author.id) {
       throw new ForbiddenError("article");
     }
 
@@ -210,16 +212,16 @@ const updateArticle = async (req, res, next) => {
 const deleteArticle = async (req, res, next) => {
   try {
     const { loggedUser } = req;
-    if (!loggedUser) throw new UnauthorizedError();
+    if (!loggedUser) throw new NotFoundError("Article");
 
-    const { id } = req.params;
+    const { slug } = req.params;
     const article = await Article.findOne({
-      where: { id: id },
+      where: { slug: slug },
       include: includeOptions,
     });
-    if (!article) throw new NotFoundError(`Article with id ${id} not found`);
+    if (!article) throw new NotFoundError("Article");
 
-    if (loggedUser.id !== article.userId) {
+    if (loggedUser.id !== article.author.id) {
       throw new ForbiddenError("article");
     }
 
