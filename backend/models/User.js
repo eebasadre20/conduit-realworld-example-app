@@ -1,4 +1,3 @@
-"use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -55,9 +54,11 @@ module.exports = (sequelize, DataTypes) => {
       username: DataTypes.STRING,
       bio: DataTypes.TEXT,
       image: DataTypes.TEXT,
+      email_verified_at: DataTypes.DATE, // Added from new code
+      password: DataTypes.STRING,
       resetPasswordToken: DataTypes.STRING,
       resetPasswordExpires: DataTypes.DATE,
-      password: DataTypes.STRING,
+      // Removed duplicate password field from new code
     },
     {
       sequelize,
