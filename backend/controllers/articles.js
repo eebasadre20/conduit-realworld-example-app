@@ -1,7 +1,7 @@
 const {
   AlreadyTakenError,
   FieldRequiredError,
-  ForbiddenError,
+  ForbiddenError, 
   NotFoundError,
   UnauthorizedError,
 } = require("../helper/customErrors");
@@ -9,9 +9,9 @@ const {
   appendFollowers,
   appendFavorites,
   appendTagList,
-  slugify,
+  slugify, 
 } = require("../helper/helpers");
-const Article = require("../models/Article.js");
+const Article = require("./models/Article");
 const { Tag, User } = require("./models/Article");
 
 const includeOptions = [
