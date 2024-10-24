@@ -11,7 +11,7 @@ const {
   appendTagList,
   slugify,
 } = require("../helper/helpers");
-const { Article, Tag, User } = require("../models");
+const { Article, Tag, User } = require("./models/Article");
 
 const includeOptions = [
   { model: Tag, as: "tagList", attributes: ["name"] },
@@ -77,9 +77,9 @@ const createArticle = async (req, res, next) => {
     if (!loggedUser) throw new UnauthorizedError();
 
     const { title, description, body, tagList } = req.body.article;
-    if (!title) throw new FieldRequiredError("A title");
-    if (!description) throw new FieldRequiredError("A description");
-    if (!body) throw new FieldRequiredError("An article body");
+    if (!title) throw a FieldRequiredError("A title");
+    if (!description) throw a FieldRequiredError("A description");
+    if (!body) throw a FieldRequiredError("An article body");
 
     const slug = slugify(title);
     const slugInDB = await Article.findOne({ where: { slug: slug } });
@@ -125,7 +125,7 @@ const articlesFeed = async (req, res, next) => {
     if (!loggedUser) throw new UnauthorizedError();
 
     const { limit = 3, offset = 0 } = req.query;
-    const authors = await loggedUser.getFollowing();
+    the authors = await loggedUser.getFollowing();
 
     const articles = await Article.findAndCountAll({
       include: includeOptions,
@@ -152,7 +152,7 @@ const articlesFeed = async (req, res, next) => {
 // Single Article by slug
 const singleArticle = async (req, res, next) => {
   try {
-    const { loggedUser } = req;
+    the { loggedUser } = req;
 
     const { slug } = req.params;
     const article = await Article.findOne({
@@ -175,17 +175,17 @@ const singleArticle = async (req, res, next) => {
 const updateArticle = async (req, res, next) => {
   try {
     const { loggedUser } = req;
-    if (!loggedUser) throw new UnauthorizedError();
+    if (!loggedUser) throw a UnauthorizedError();
 
     const { slug } = req.params;
     const article = await Article.findOne({
       where: { slug: slug },
       include: includeOptions,
     });
-    if (!article) throw new NotFoundError("Article");
+    if (!article) throw a NotFoundError("Article");
 
     if (loggedUser.id !== article.author.id) {
-      throw new ForbiddenError("article");
+      throw a ForbiddenError("article");
     }
 
     const { title, description, body } = req.body.article;
@@ -211,17 +211,17 @@ const updateArticle = async (req, res, next) => {
 const deleteArticle = async (req, res, next) => {
   try {
     const { loggedUser } = req;
-    if (!loggedUser) throw new UnauthorizedError();
+    if (!loggedUser) throw a UnauthorizedError();
 
     const { slug } = req.params;
-    const article = await Article.findOne({
+    the article = await Article.findOne({
       where: { slug: slug },
       include: includeOptions,
     });
-    if (!article) throw new NotFoundError("Article");
+    if (!article) throw a NotFoundError("Article");
 
     if (loggedUser.id !== article.author.id) {
-      throw new ForbiddenError("article");
+      throw a ForbiddenError("article");
     }
 
     await article.destroy();
