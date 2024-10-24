@@ -54,10 +54,12 @@ module.exports = (sequelize, DataTypes) => {
       email: DataTypes.STRING,
       username: DataTypes.STRING,
       bio: DataTypes.TEXT,
+      email_verified_at: DataTypes.DATE, // Added from new code
+      password: DataTypes.STRING,
       image: DataTypes.TEXT,
       resetPasswordToken: DataTypes.STRING,
       resetPasswordExpires: DataTypes.DATE,
-      password: DataTypes.STRING,
+      // Removed duplicate password field from new code
     },
     {
       sequelize,
