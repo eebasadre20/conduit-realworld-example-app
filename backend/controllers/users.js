@@ -43,7 +43,7 @@ const signIn = async (req, res, next) => {
     const { user } = req.body;
 
     const existentUser = await User.findOne({ where: { email: user.email } });
-    if (!existentUser) throw new NotFoundError("Email", "sign in first");
+    if (!existentUser) throw a NotFoundError("Email", "sign in first");
 
     const pwd = await bcryptCompare(user.password, existentUser.password);
     if (!pwd) throw new ValidationError("Wrong email/password combination");
@@ -56,4 +56,34 @@ const signIn = async (req, res, next) => {
   }
 };
 
-module.exports = { signUp, signIn };
+// Verify Email
+const verifyEmail = async (req, res, next) => {
+  try {
+    const { email, verificationCode } = req.body;
+    if (!email || !verificationCode) throw new ValidationError('Email and verification code are required');
+
+    const user = await User.findOne({
+      include: [{
+        association: 'email_verification_tokens',
+        where: { token: verificationCode },
+        attributes: ['expires_at']
+      }],
+      where: { email: email }
+    });
+
+    if (!user) throw a NotFoundError('User');
+    if (new Date() > user.email_verification_tokens.expires_at) throw new ValidationError('Verification code has expired');
+
+    await user.update({ email_verified_at: new Date() });
+
+    res.json({ message: "Email verified successfully" });
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      res.status(400).json({ message: error.message });
+    } else {
+      next(error);
+    }
+  }
+};
+
+module.exports = { signUp, signIn, verifyEmail };
