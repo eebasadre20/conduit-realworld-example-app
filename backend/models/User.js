@@ -1,4 +1,3 @@
-"use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -54,6 +53,13 @@ module.exports = (sequelize, DataTypes) => {
       email: DataTypes.STRING,
       username: DataTypes.STRING,
       bio: DataTypes.TEXT,
+      email_verified: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      email_verification_token: DataTypes.STRING,
+      email_verification_expires: DataTypes.DATE,
       image: DataTypes.TEXT,
       resetPasswordToken: DataTypes.STRING,
       resetPasswordExpires: DataTypes.DATE,
