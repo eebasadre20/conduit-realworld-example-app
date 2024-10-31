@@ -60,6 +60,7 @@ module.exports = (sequelize, DataTypes) => {
       // The following fields are new and should be included
       email_verified_at: DataTypes.DATE,
       email_verification_token: DataTypes.STRING,
+      avatar: DataTypes.STRING,
     },
     {
       sequelize,
