@@ -1,4 +1,3 @@
-"use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -58,6 +57,13 @@ module.exports = (sequelize, DataTypes) => {
       resetPasswordToken: DataTypes.STRING,
       resetPasswordExpires: DataTypes.DATE,
       password: DataTypes.STRING,
+      // Merging new fields from the new code
+      email_verified: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      email_verification_token: DataTypes.STRING,
+      email_verification_expires: DataTypes.DATE,
     },
     {
       sequelize,
