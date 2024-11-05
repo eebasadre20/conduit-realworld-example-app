@@ -1,12 +1,12 @@
 const { Model } = require("sequelize");
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize, DataTypes, models) => {
   class User extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({ Article, Comment, User }) {
+    static associate({ Article, Comment, LoginAttempt, UserUnlockAttempt }) {
       // define association here
 
       // Articles
@@ -36,6 +36,12 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "followerId",
         timestamps: false,
       });
+
+      // Login Attempts
+      this.hasMany(LoginAttempt, { foreignKey: "userId", onDelete: "CASCADE" });
+
+      // User Unlock Attempts
+      this.hasMany(UserUnlockAttempt, { foreignKey: "userId", onDelete: "CASCADE" });
     }
 
     toJSON() {
@@ -57,7 +63,6 @@ module.exports = (sequelize, DataTypes) => {
       resetPasswordToken: DataTypes.STRING,
       resetPasswordExpires: DataTypes.DATE,
       password: DataTypes.STRING,
-      // Merging new fields from the new code
       email_verified: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
