@@ -1,4 +1,3 @@
-"use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Comment extends Model {
@@ -32,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
       },
       body: DataTypes.TEXT,
+      // No additional fields are introduced in the new code, so we keep the existing fields as they are.
     },
     {
       sequelize,

@@ -1,5 +1,5 @@
 const { Model } = require("sequelize");
-module.exports = (sequelize, DataTypes, models) => {
+module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
      * Helper method for defining associations.
@@ -67,8 +67,14 @@ module.exports = (sequelize, DataTypes, models) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
-      email_verification_token: DataTypes.STRING,
-      email_verification_expires: DataTypes.DATE,
+      email_verification_token: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      email_verification_expires: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
     },
     {
       sequelize,
