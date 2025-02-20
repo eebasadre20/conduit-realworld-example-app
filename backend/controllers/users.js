@@ -56,4 +56,22 @@ const signIn = async (req, res, next) => {
   }
 };
 
-module.exports = { signUp, signIn };
+const verifyEmail = async (req, res, next) => {
+  try {
+    const { token } = req.params;
+    const user = await User.findOne({ where: { verificationToken: token } });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid verification token' });
+    }
+
+    user.isEmailVerified = true;
+    user.verificationToken = null;
+    await user.save();
+
+    res.status(200).json({ message: 'Email verified successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+module.exports = { signUp, signIn, verifyEmail };
