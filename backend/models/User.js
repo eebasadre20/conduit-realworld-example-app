@@ -58,15 +58,11 @@ module.exports = (sequelize, DataTypes) => {
       resetPasswordToken: DataTypes.STRING,
       resetPasswordExpires: DataTypes.DATE,
       password: DataTypes.STRING,
-      isEmailVerified: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-      }
     },
     {
       sequelize,
       modelName: "User",
-    },
+    }
   );
   return User;
 };
