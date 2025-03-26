@@ -66,8 +66,11 @@ const verifyEmail = async (req, res, next) => {
     }
 
     // Check if the token is expired
-    if (user.verificationTokenExpires < new Date()) {
-      return res.status(400).json({ message: "Verification token has expired" });
+    const currentDate = new Date();
+    if (user.verificationTokenExpires < currentDate) {
+      return res
+        .status(400)
+        .json({ message: "Verification token has expired" });
     }
 
     user.emailVerified = true;
