@@ -12,6 +12,7 @@ const {
 const signUp = async (req, res, next) => {
   try {
     const { username, email, bio, image, password } = req.body.user;
+    // Check if username is provided, throw an error if not
     if (!username) throw new FieldRequiredError(`A username`);
     if (!email) throw new FieldRequiredError(`An email`);
     if (!password) throw new FieldRequiredError(`A password`);
@@ -28,7 +29,6 @@ const signUp = async (req, res, next) => {
       image: image,
       password: await bcryptHash(password),
     });
-
     newUser.dataValues.token = await jwtSign(newUser);
 
     res.status(201).json({ user: newUser });
@@ -55,4 +55,23 @@ const signIn = async (req, res, next) => {
     next(error);
   }
 };
-module.exports = { signUp, signIn };
+
+const verifyEmail = async (req, res, next) => {
+  try {
+    const { token } = req.params;
+    const user = await User.findOne({ where: { verificationToken: token } });
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid verification token" });
+    }
+
+    user.emailVerified = true;
+    user.verificationToken = null; // Clear the token after verification
+    await user.save();
+
+    res.status(200).json({ message: "Email verified successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+module.exports = { signUp, signIn, verifyEmail };
