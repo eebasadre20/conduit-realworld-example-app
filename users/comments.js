@@ -1,11 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const verifyToken = require("../../middleware/authentication");
-const {
-  allUserComments,
-  createUserComment,
-  deleteUserComment,
-} = require("../../controllers/userComments");
+const { allUserComments, createUserComment, deleteUserComment } = require("../../controllers/userComments");
 
 // Get all comments for a user
 router.get("/:userId/comments", verifyToken, allUserComments);
