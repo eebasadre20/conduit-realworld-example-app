@@ -65,17 +65,8 @@ const verifyEmail = async (req, res, next) => {
       return res.status(400).json({ message: "Invalid verification token" });
     }
 
-    // Check if the token is expired
-    const currentDate = new Date();
-    if (user.verificationTokenExpires < currentDate) {
-      return res
-        .status(400)
-        .json({ message: "Verification token has expired" });
-    }
-
     user.emailVerified = true;
     user.verificationToken = null; // Clear the token after verification
-    user.verificationTokenExpires = null; // Clear the expiration date
     await user.save();
 
     res.status(200).json({ message: "Email verified successfully" });
