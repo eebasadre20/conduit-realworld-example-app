@@ -11,6 +11,7 @@ const userRoutes = require("./routes/user");
 const articlesRoutes = require("./routes/articles");
 const profilesRoutes = require("./routes/profiles");
 const tagsRoutes = require("./routes/tags");
+const otpRoutes = require("./routes/otp"); // <-- added
 
 const app = express();
 app.use(cors());
@@ -35,6 +36,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/articles", articlesRoutes);
 app.use("/api/profiles", profilesRoutes);
 app.use("/api/tags", tagsRoutes);
+app.use("/api/otp", otpRoutes); // <-- added
 app.get("*", (req, res) =>
   res.status(404).json({ errors: { body: ["Not found"] } }),
 );
