@@ -8,6 +8,7 @@ module.exports = {
         username: `exampleUser${index + 1}`,
         email: `example${index + 1}@mail.com`,
         password: `examplePwd${index + 1}`,
+       role: index === 0 ? "admin" : "user",
         createdAt: new Date(),
         updatedAt: new Date(),
       }));
